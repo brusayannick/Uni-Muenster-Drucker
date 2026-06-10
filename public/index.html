@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print Map Münster</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <aside id="sidebar">
+
+    <!-- Main content -->
+    <div id="sidebarMain">
+      <header class="sidebar-header">
+        <div class="brand">
+          <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9" y="3" width="14" height="7" rx="2" fill="currentColor" opacity="0.35"/>
+            <rect x="3" y="9" width="26" height="13" rx="3.5" fill="currentColor"/>
+            <rect x="9" y="19" width="14" height="10" rx="2" fill="currentColor" opacity="0.4"/>
+            <circle cx="23" cy="15.5" r="2.5" fill="white" opacity="0.9"/>
+            <rect x="11" y="22.5" width="9" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+            <rect x="11" y="25.5" width="6" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+          </svg>
+          <div>
+            <span class="brand-title">Print Map</span>
+            <span class="brand-sub">Münster</span>
+          </div>
+          <button id="settingsBtn" class="icon-btn" title="Einstellungen" aria-label="Einstellungen öffnen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7h-9"/><path d="M14 17H5"/>
+              <circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input id="search" type="search" placeholder="Name, Straße, Stadtteil…" autocomplete="off">
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Zugang</span>
+          <div class="filter-row" id="accessFilter">
+            <button class="chip active" data-access="all">Alle</button>
+            <button class="chip chip-public" data-access="public">Öffentlich</button>
+            <button class="chip chip-private" data-access="private">Intern</button>
+          </div>
+        </div>
+
+        <div class="stats-bar">
+          <span id="statsCount">–</span>
+          <span class="stats-label">Drucker</span>
+          <span class="stats-dot"></span>
+          <span id="statsMapped">–</span>
+          <span class="stats-label">kartiert</span>
+        </div>
+      </header>
+
+      <ul id="printerList" role="list"></ul>
+    </div>
+
+    <!-- Settings panel (overlays sidebar) -->
+    <div id="settingsPanel" class="settings-panel" aria-label="Einstellungen">
+      <div class="settings-head">
+        <button id="settingsClose" class="icon-btn" title="Zurück" aria-label="Einstellungen schließen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <span class="settings-title-text">Einstellungen</span>
+      </div>
+
+      <div class="settings-body">
+
+        <div class="settings-section">
+          <div class="section-label">Darstellung</div>
+
+          <div class="settings-row">
+            <span class="settings-row-label">Design</span>
+            <div class="tgl-group" id="themeToggle">
+              <button class="tgl active" data-value="dark">Dunkel</button>
+              <button class="tgl" data-value="light">Hell</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="section-label">Karte</div>
+
+          <div class="settings-row">
+            <span class="settings-row-label">Stil</span>
+            <div class="tgl-group" id="tileToggle">
+              <button class="tgl active" data-value="dark">Dunkel</button>
+              <button class="tgl" data-value="light">Hell</button>
+              <button class="tgl" data-value="osm">Straße</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <span class="settings-row-label">Cluster</span>
+            <div class="tgl-group" id="clusterToggle">
+              <button class="tgl" data-value="tight">Eng</button>
+              <button class="tgl active" data-value="medium">Mittel</button>
+              <button class="tgl" data-value="loose">Weit</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Map ──────────────────────────────────────────────── -->
+  <main id="map">
+    <button id="sidebarToggle" class="sidebar-toggle" title="Sidebar ein-/ausblenden" aria-label="Sidebar ein-/ausblenden">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin></script>
+  <script src="app.js"></script>
+</body>
+</html>
