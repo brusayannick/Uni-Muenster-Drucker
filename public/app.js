@@ -74,7 +74,7 @@ let selectedId = null;
 
 /* ── API ─────────────────────────────────────────────────────── */
 async function loadPrinters() {
-  const res = await fetch('/api/printers');
+  const res = await fetch('data/printers.json');
   allPrinters = await res.json();
   applyFilters();
 }

@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "geocode": "node geocode.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "export": "node export.js"
   },
   "dependencies": {
     "express": "^4.18.2"
